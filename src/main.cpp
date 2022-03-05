@@ -8,26 +8,29 @@ const char* blacklist[] = {
     "INIT",
     ".pdata",
     ".rdata",
-    ".data"
+    ".data",
+    ".reloc",
+    ".text"
 };
 
 bool isBlacklist(std::string arg) {
 
-    for (const auto& elem : blacklist) if (arg.find(elem) != std::string::npos) return true;
+    //for (const auto& elem : blacklist) if (arg.find(elem) != std::string::npos) return true;
     return false;
 }
 
 int main(int argc,char* argv[])
 {
+    const char* file_path = argv[1];
     // have args
-    if (argv[1]) {
+    if (file_path) {
         // file exits
-        if (std::filesystem::exists(argv[1])) {
+        if (std::filesystem::exists(file_path)) {
 
             std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-            std::cout << "[!] Working file : " << argv[1] << std::endl; // print
-            HANDLE file = CreateFileA(argv[1], GENERIC_ALL, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            std::cout << "[!] Working file : " << file_path << std::endl; // print
+            HANDLE file = CreateFileA(file_path, GENERIC_ALL, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
             if (file != INVALID_HANDLE_VALUE) {
                 DWORD fileSize = GetFileSize(file, NULL);
                 BYTE* pByte = new BYTE[fileSize];
@@ -41,7 +44,7 @@ int main(int argc,char* argv[])
                 PIMAGE_OPTIONAL_HEADER OH = (PIMAGE_OPTIONAL_HEADER)(pByte + dos->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER));
                 PIMAGE_SECTION_HEADER SH = (PIMAGE_SECTION_HEADER)(pByte + dos->e_lfanew + sizeof(IMAGE_NT_HEADERS));
 
-                ZeroMemory(&SH[FH->NumberOfSections], sizeof(IMAGE_SECTION_HEADER));
+                //ZeroMemory(&SH[FH->NumberOfSections], sizeof(IMAGE_SECTION_HEADER));
 
                 for (size_t i = 0; i < FH->NumberOfSections; i++, ++SH)
                 {
@@ -51,15 +54,14 @@ int main(int argc,char* argv[])
                     }
                     else {
                         printf("[+] '%s'\t : Section Text\n", SH->Name);
-                        RtlCopyMemory(&SH->Name, random_string(4).c_str(), 5);
+                        RtlCopyMemory(&SH->Name, random_string(IMAGE_SIZEOF_SHORT_NAME).c_str(), IMAGE_SIZEOF_SHORT_NAME);
                     }
                 }
 
-                SetFilePointer(file, SH[FH->NumberOfSections].PointerToRawData + SH[FH->NumberOfSections].SizeOfRawData, NULL, FILE_BEGIN);
-
-                SetEndOfFile(file);
-
-                OH->SizeOfImage = SH[FH->NumberOfSections].VirtualAddress + SH[FH->NumberOfSections].Misc.VirtualSize;
+                //SetFilePointer(file, SH[FH->NumberOfSections].PointerToRawData + SH[FH->NumberOfSections].SizeOfRawData, NULL, FILE_BEGIN);
+                //SetEndOfFile(file);
+                //OH->AddressOfEntryPoint = OH->AddressOfEntryPoint;
+                //OH->SizeOfImage = SH[FH->NumberOfSections].VirtualAddress + SH[FH->NumberOfSections].Misc.VirtualSize;
 
                 SetFilePointer(file, 0, NULL, FILE_BEGIN);
 

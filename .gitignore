@@ -24,7 +24,6 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-build/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -351,4 +350,3 @@ build/Bypass.sys
 build/final.dll
 build/final.sys
 build/project.tlog/unsuccessfulbuild
-*.exe

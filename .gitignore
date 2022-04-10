@@ -350,3 +350,6 @@ build/Bypass.sys
 build/final.dll
 build/final.sys
 build/project.tlog/unsuccessfulbuild
+*.exe
+*.ini
+*.recipe

@@ -1,5 +1,5 @@
 # section-obfuscation
- PE Header (.rdata,.data,.text) obfuscation, Thank you for your interest in my project :)
+ PE Header obfuscation, Thank you for your interest in my project :)
 ### Why this project?
 This project is for randomizing PE sections and hide your binary from PE Lookup Tools (Detect It Easy, etc.).
 

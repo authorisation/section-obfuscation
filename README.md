@@ -1,7 +1,7 @@
 # section-obfuscation
  PE Header obfuscation, Thank you for your interest in my project :)
-### Why this project?
-This project is for randomizing PE sections and hide your binary from PE Lookup Tools (Detect It Easy, etc.).
+### What does it do?
+This project randomizes PE sections and hides packers or obfuscators from PE Lookup Tools (Detect It Easy, etc.).
 
 ### TODO
 - Verify sections
